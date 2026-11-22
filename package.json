@@ -1,0 +1,12 @@
+{
+  "name": "ela-ielts-ai-coach",
+  "version": "1.0.0",
+  "description": "ELA IELTS & PTE AI Coach App (5 AI Agents + India UPI & Global USD Monetization)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

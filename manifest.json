@@ -1,0 +1,9 @@
+{
+  "name": "ELA IELTS & PTE AI Coach",
+  "short_name": "ELA AI Coach",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090f1c",
+  "theme_color": "#0f172a",
+  "description": "AI-powered IELTS, PTE, Spoken English & Grammar Coach by ELA IELTS (https://elaielts.org)."
+}

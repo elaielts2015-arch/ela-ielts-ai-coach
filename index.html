@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ELA IELTS & PTE AI Coach — Band 8+ Trainer</title>
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#0f172a" />
+<style>
+  :root {
+    --bg:#090f1c; --panel:#101a2e; --border:#243659;
+    --text:#f1f5f9; --muted:#94a3b8; --accent:#38bdf8; --green:#22c55e; --gold:#f59e0b;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  header { padding:14px 22px; background:#0e1729; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  .brand { font-size:19px; font-weight:800; }
+  .brand span { color:var(--gold); }
+  .top-right { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+  .badge { font-size:12px; padding:5px 10px; border-radius:999px; background:#1c2e4f; color:#7dd3fc; font-weight:600; }
+  .badge.streak { background:#451a03; color:#fcd34d; }
+  .badge.pro { background:#14532d; color:#86efac; }
+  .fc-box { margin-top:16px; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:16px; }
+  .fc-card { background:#0b1324; border:1px solid var(--accent); border-radius:12px; padding:18px; text-align:center; cursor:pointer; margin:10px 0; transition:0.15s; }
+  .fc-card:hover { border-color:var(--gold); }
+  .fc-basic { font-size:13px; color:#f87171; text-decoration:line-through; margin-bottom:4px; }
+  .fc-c1 { font-size:22px; font-weight:800; color:var(--gold); margin-bottom:6px; }
+  .fc-ex { font-size:13px; color:#cbd5e1; }
+  .wrap { max-width:1020px; margin:0 auto; padding:20px; }
+  .agents { display:grid; grid-template-columns:repeat(auto-fit, minmax(215px, 1fr)); gap:10px; margin-bottom:16px; }
+  .agent-card { padding:14px; border-radius:12px; border:1px solid var(--border); background:var(--panel); cursor:pointer; text-align:left; color:var(--text); }
+  .agent-card.active { border-color:var(--gold); background:#1c2947; box-shadow:0 0 0 1px var(--gold); }
+  .agent-card .title { font-weight:700; font-size:14px; margin-bottom:4px; }
+  .agent-card .desc { font-size:12px; color:var(--muted); line-height:1.4; }
+  .box { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px; }
+  select, textarea, input { background:#090f1c; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:9px 12px; font-size:13px; font-family:inherit; }
+  textarea { width:100%; min-height:110px; resize:vertical; margin-bottom:12px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .chip { font-size:11px; padding:5px 10px; border-radius:999px; background:#1b2d4f; color:#bae6fd; border:1px solid var(--border); cursor:pointer; }
+  .btn { border:none; border-radius:8px; padding:10px 16px; font-size:13px; font-weight:700; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; }
+  .btn-primary { background:var(--accent); color:#090f1c; }
+  .btn-gold { background:var(--gold); color:#090f1c; }
+  .btn-green { background:#15803d; color:#fff; }
+  .btn-dark { background:#334155; color:#fff; }
+  .btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .output-box { margin-top:16px; background:#0b1324; border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .meta { font-size:12px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+  pre { white-space:pre-wrap; word-wrap:break-word; font-family:system-ui,-apple-system,Segoe UI,sans-serif; font-size:14px; line-height:1.6; margin:0; color:#e2e8f0; }
+  .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:50; align-items:center; justify-content:center; padding:16px; }
+  .modal-bg.open { display:flex; }
+  .modal { background:#101a2e; border:1px solid var(--gold); border-radius:16px; max-width:540px; width:100%; padding:22px; }
+  .modal h3 { margin:0 0 8px; color:#f8fafc; }
+  .tab-bar { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:12px 0; }
+  .tab-btn { padding:9px; border-radius:8px; border:1px solid var(--border); background:#0b1324; color:var(--muted); font-weight:700; cursor:pointer; font-size:13px; }
+  .tab-btn.active { border-color:var(--gold); color:#fff; background:#1c2947; }
+  .plan { background:#0b1324; border:1px solid var(--border); border-radius:10px; padding:14px; font-size:13px; margin-bottom:12px; }
+  .plan strong { color:var(--gold); font-size:15px; display:block; margin-bottom:4px; }
+  .qr-img { width:145px; height:145px; border-radius:10px; border:2px solid var(--gold); margin:8px auto; display:block; background:#fff; object-fit:contain; }
+  .tools-bar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between; margin-bottom:8px; font-size:12px; color:var(--muted); }
+  .wc-pill { padding:3px 9px; border-radius:999px; background:#1c2e4f; color:#fcd34d; font-weight:700; }
+  .wc-pill.ok { background:#14532d; color:#86efac; }
+  .score-card { display:none; grid-template-columns:130px 1fr; gap:14px; background:#0e1930; border:1px solid var(--gold); border-radius:12px; padding:14px; margin-bottom:14px; align-items:center; }
+  .score-card.show { display:grid; }
+  @media (max-width:560px) { .score-card { grid-template-columns:1fr; } }
+  .overall-box { text-align:center; background:#182642; border-radius:10px; padding:12px; }
+  .overall-box .num { font-size:32px; font-weight:900; color:var(--gold); line-height:1.1; }
+  .overall-box .lbl { font-size:11px; color:var(--muted); text-transform:uppercase; }
+  .bar-row { display:grid; grid-template-columns:100px 1fr 36px; gap:8px; align-items:center; font-size:12px; margin-bottom:6px; }
+  .bar-bg { height:8px; background:#1e293b; border-radius:999px; overflow:hidden; }
+  .bar-fill { height:100%; background:linear-gradient(90deg,#38bdf8,#22c55e); border-radius:999px; }
+  @media print { header, .agents, .row, .chips, textarea, .tools-bar, .modal-bg { display:none !important; } body { background:#fff; color:#000; } pre { color:#000; } }
+  footer { text-align:center; padding:18px; color:var(--muted); font-size:12px; }
+  footer a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">🎓 ELA <span>IELTS & PTE AI Coach</span></div>
+  <div class="top-right">
+    <span class="badge streak" id="streakBadge">🔥 Day 1 Streak</span>
+    <span class="badge" id="trialBadge">Free Trial: 3 / 3 left</span>
+    <button class="btn btn-gold" onclick="openUpgrade()">⭐ Upgrade Pro</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="agents" id="agentGrid"></div>
+
+  <div class="box">
+    <div class="row">
+      <select id="examSelect">
+        <option value="IELTS Academic">IELTS Academic</option>
+        <option value="IELTS General Training">IELTS General Training</option>
+        <option value="PTE Academic / PTE Core">PTE Academic / PTE Core</option>
+        <option value="Spoken English & Grammar">Spoken English & Grammar</option>
+      </select>
+      <select id="langSelect">
+        <option value="English">English Only</option>
+        <option value="English + Punjabi (ਪੰਜਾਬੀ) explanation">English + Punjabi (ਪੰਜਾਬੀ)</option>
+        <option value="English + Hindi (हिन्दी) explanation">English + Hindi (हिन्दी)</option>
+      </select>
+      <select id="topicLibrary" onchange="pickLibraryTopic(this)" style="flex:1;min-width:230px">
+        <option value="">📚 Quick Topic Library (50+ Ready Topics)...</option>
+      </select>
+    </div>
+
+    <div class="chips" id="presetChips"></div>
+
+    <div class="tools-bar">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button id="micBtn" class="btn btn-dark" style="padding:6px 11px;font-size:12px" onclick="toggleMic()">🎤 Speak Answer (Mic)</button>
+        <button class="btn btn-dark" style="padding:6px 11px;font-size:12px" onclick="startTimer(120)">⏱️ 2m Speaking Timer</button>
+        <button class="btn btn-dark" style="padding:6px 11px;font-size:12px" onclick="startTimer(2400)">⏱️ 40m Essay Timer</button>
+        <span id="timerDisplay" style="color:var(--gold);font-weight:700"></span>
+      </div>
+      <span id="wordCount" class="wc-pill">0 words (Task 2 target: 250+)</span>
+    </div>
+
+    <textarea id="studentInput" oninput="updateWordCount()" placeholder="Paste your IELTS/PTE essay, or click 🎤 Speak Answer to speak your Cue Card out loud..."></textarea>
+
+    <div class="row">
+      <button id="runBtn" class="btn btn-primary" onclick="runCoach()">⚡ Evaluate / Coach Me</button>
+      <button id="listenBtn" class="btn btn-dark" onclick="toggleSpeak()">🔊 Listen (UK/US)</button>
+      <button class="btn btn-dark" onclick="copyOut()">📋 Copy</button>
+      <button class="btn btn-dark" onclick="window.print()">📄 PDF Report</button>
+      <button class="btn btn-gold" onclick="shareScoreWa()">📲 Share My Score</button>
+      <a class="btn btn-green" href="https://wa.me/919876701868?text=Hi%20Paramjeet%20Sir%2C%20I%20want%201-on-1%20IELTS%2FPTE%20coaching!" target="_blank">💬 1-on-1 Live Class</a>
+    </div>
+
+    <div class="output-box">
+      <div id="historyBar" style="display:none;margin-bottom:10px;font-size:12px;color:#93c5fd"></div>
+      <div class="score-card" id="scoreCard">
+        <div class="overall-box">
+          <div class="lbl">Est. Band</div>
+          <div class="num" id="scOverall">6.5</div>
+        </div>
+        <div id="scoreBars"></div>
+      </div>
+      <div class="meta">
+        <span id="statusText">Ready — pick an AI Coach Agent above and start!</span>
+        <span id="speedText"></span>
+      </div>
+      <pre id="outputText">Your Band 8+ coaching feedback will appear here in 1–2 seconds...</pre>
+    </div>
+  </div>
+
+  <div class="fc-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <strong style="font-size:15px">🃏 Band 8+ C1 Vocabulary Flashcards (<span id="fcNum">1</span> / 15)</strong>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-dark" style="padding:6px 11px;font-size:12px" onclick="speakFlashcard()">🔊 Pronounce</button>
+        <button class="btn btn-dark" style="padding:6px 11px;font-size:12px" onclick="nextFlashcard(-1)">◀ Prev</button>
+        <button class="btn btn-primary" style="padding:6px 11px;font-size:12px" onclick="nextFlashcard(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="fc-card" onclick="flipFlashcard()">
+      <div class="fc-basic" id="fcBasic"></div>
+      <div class="fc-c1" id="fcC1"></div>
+      <div class="fc-ex" id="fcEx"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="upgradeModal">
+  <div class="modal">
+    <h3>⭐ Unlock Unlimited ELA AI Coach</h3>
+    <p style="color:var(--muted);font-size:13px;margin:0 0 10px">You've used your 3 free trial checks. Upgrade for unlimited Writing Evaluations, Speaking Cue Cards, Grammar Quizzes & Study Plans!</p>
+    <div class="tab-bar">
+      <button id="tabIndia" class="tab-btn active" onclick="switchPayTab('india')">🇮🇳 India Students (INR / UPI)</button>
+      <button id="tabGlobal" class="tab-btn" onclick="switchPayTab('global')">🌍 Foreign Students (USD)</button>
+    </div>
+    <div id="paneIndia" class="plan">
+      <strong>🇮🇳 India Student Plan — ₹199/month (or ₹499 / 3 months)</strong>
+      <img class="qr-img" src="/payment-qr.jpg" alt="ELA UPI Payment QR" />
+      <div style="text-align:center">
+        Payee: <b>Paramjeet Singh</b> • UPI ID: <b>8146963818@pthdfc</b><br>
+        <small style="color:var(--muted)">Scan & send payment screenshot on WhatsApp (+91 98767 01868) for instant Pro activation.</small>
+      </div>
+    </div>
+    <div id="paneGlobal" class="plan" style="display:none">
+      <strong>🌍 International Student Plan (CA / UK / US / AU)</strong>
+      <div style="margin:8px 0">
+        • <b>$9 / month</b> — Unlimited AI Evaluations, Cue Cards & Study Plans<br>
+        • <b>$19 / 3 months</b> — Best Value (Save 30%)
+      </div>
+      Pay securely via <b>Wise</b> or <b>Razorpay International</b>.<br>
+      <small style="color:var(--muted)">Click Activate on WhatsApp (+91 98767 01868) or email <b>elaielts2015@gmail.com</b> to receive your instant international payment link & Pro code.</small>
+    </div>
+    <div class="row" style="margin-top:12px">
+      <input id="proCodeInput" placeholder="Enter Pro Unlock Code" style="flex:1" />
+      <button class="btn btn-gold" onclick="unlockPro()">Unlock</button>
+    </div>
+    <div class="row" style="justify-content:space-between;margin:8px 0 0">
+      <a class="btn btn-green" href="https://wa.me/919876701868?text=Hi%20Sir%2C%20I%20want%20to%20upgrade%20to%20ELA%20IELTS%20AI%20Coach%20Pro!" target="_blank">💬 Activate on WhatsApp</a>
+      <button class="btn btn-dark" onclick="closeUpgrade()">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Powered by <b>ELA IELTS</b> • <a href="https://elaielts.org" target="_blank">https://elaielts.org</a> • WhatsApp: +91 98767 01868 • Email: elaielts2015@gmail.com
+</footer>
+
+<script>
+const AGENTS = [
+  {
+    id: "writing", icon: "✍️", title: "Writing Evaluator Agent",
+    desc: "Instant Band score + line-by-line IELTS/PTE essay corrections.",
+    presets: [
+      "Evaluate my Task 2 intro: Nowadays many people think AI will replace teachers in schools. I agree because technology is fast and cheap.",
+      "Give me a Band 8+ Task 2 essay structure on: Should governments ban junk food ads?"
+    ]
+  },
+  {
+    id: "speaking", icon: "🎤", title: "Speaking & Cue Card Agent",
+    desc: "Practice prompts, daily roleplays & Band 8+ answers (EN / PA / HI).",
+    presets: [
+      "Cue Card: Describe a skill you learned that helped you in life",
+      "PTE Respond to a Situation: You missed a group presentation deadline due to illness",
+      "Spoken English Roleplay: Job Interview — 'Tell me about yourself' & strengths",
+      "Spoken English Roleplay: Airport & Visa Immigration Officer Conversation",
+      "Spoken English Roleplay: Confident Office Meeting & Client Call"
+    ]
+  },
+  {
+    id: "grammar", icon: "📚", title: "Grammar & Spoken English Agent",
+    desc: "Daily C1 upgrades, real-life sentences & 3-question mini-quiz.",
+    presets: [
+      "Stop saying 'very good', 'very tired', 'I don't know' -> give me Band 8+ C1 upgrades",
+      "Teach me C1 Inversion (Rarely have I seen...) with a 3-question quiz",
+      "10 Daily Spoken English Sentences for Restaurant, Shopping & Doctor Visits"
+    ]
+  },
+  {
+    id: "planner", icon: "📅", title: "Study Planner Agent",
+    desc: "Custom 15-day or 30-day target-band study schedule.",
+    presets: [
+      "30-day IELTS Academic plan: Currently Band 6.0, Target Band 7.5, 2 hours/day",
+      "15-day PTE Core fast-track plan for Canada PR, 3 hours/day"
+    ]
+  },
+  {
+    id: "reading", icon: "📖", title: "Reading & TFNG Agent",
+    desc: "Band 8 passage + 5 True/False/Not Given or PTE Fill-in-the-Blanks.",
+    presets: [
+      "Generate an IELTS Academic Reading passage on AI in Healthcare with 5 True/False/Not Given questions",
+      "Generate 5 PTE Reading & Writing Fill-in-the-Blanks collocation questions with explanations"
+    ]
+  }
+];
+
+const FREE_LIMIT = 3;
+let activeAgent = "writing";
+let lastOutput = "";
+let usedCount = Number(localStorage.getItem("ela_coach_used_v1") || 0);
+let isPro = localStorage.getItem("ela_coach_pro_v1") === "1";
+
+function updateBadge() {
+  const b = document.getElementById("trialBadge");
+  if (isPro) { b.textContent = "⭐ PRO UNLIMITED"; b.classList.add("pro"); }
+  else { b.textContent = `Free Trial: ${Math.max(0, FREE_LIMIT - usedCount)} / ${FREE_LIMIT} left`; }
+}
+
+function renderAgents() {
+  document.getElementById("agentGrid").innerHTML = AGENTS.map(a => `
+    <button class="agent-card ${a.id === activeAgent ? 'active' : ''}" onclick="selectAgent('${a.id}')">
+      <div class="title">${a.icon} ${a.title}</div>
+      <div class="desc">${a.desc}</div>
+    </button>
+  `).join("");
+  const cur = AGENTS.find(a => a.id === activeAgent);
+  document.getElementById("presetChips").innerHTML = cur.presets.map((p, idx) =>
+    `<span class="chip" onclick="usePreset(${idx})">${p}</span>`
+  ).join("");
+}
+
+window.usePreset = (idx) => {
+  const cur = AGENTS.find(a => a.id === activeAgent);
+  if (!cur || !cur.presets[idx]) return;
+  document.getElementById("studentInput").value = cur.presets[idx];
+  updateWordCount();
+};
+
+window.selectAgent = (id) => { activeAgent = id; renderAgents(); };
+window.switchPayTab = (tab) => {
+  const isInd = tab === "india";
+  document.getElementById("paneIndia").style.display = isInd ? "block" : "none";
+  document.getElementById("paneGlobal").style.display = isInd ? "none" : "block";
+  document.getElementById("tabIndia").classList.toggle("active", isInd);
+  document.getElementById("tabGlobal").classList.toggle("active", !isInd);
+};
+window.openUpgrade = () => {
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+  switchPayTab(/Kolkata|Calcutta|India/i.test(tz) ? "india" : "global");
+  document.getElementById("upgradeModal").classList.add("open");
+};
+window.closeUpgrade = () => document.getElementById("upgradeModal").classList.remove("open");
+window.unlockPro = () => {
+  const code = document.getElementById("proCodeInput").value.trim().toLowerCase();
+  if (code === "ela2015" || code === "elapro2026") {
+    isPro = true;
+    localStorage.setItem("ela_coach_pro_v1", "1");
+    updateBadge();
+    closeUpgrade();
+    alert("✅ Pro Unlimited Unlocked!");
+  } else {
+    alert("Invalid code. Message +91 98767 01868 on WhatsApp after payment to get your Pro code.");
+  }
+};
+
+window.runCoach = async () => {
+  if (!isPro && usedCount >= FREE_LIMIT) { openUpgrade(); return; }
+  const btn = document.getElementById("runBtn");
+  const status = document.getElementById("statusText");
+  const speed = document.getElementById("speedText");
+  const out = document.getElementById("outputText");
+  btn.disabled = true;
+  status.textContent = "🎓 AI Coach analyzing...";
+  speed.textContent = "";
+  out.textContent = "Generating Band 8+ coaching feedback...";
+  try {
+    const res = await fetch("/api/coach", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        agent: activeAgent,
+        exam: document.getElementById("examSelect").value,
+        lang: document.getElementById("langSelect").value,
+        input: document.getElementById("studentInput").value.trim()
+      })
+    });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || "Failed");
+    lastOutput = data.text;
+    renderScoreCard(data.text);
+    out.textContent = data.text.replace(/^SCORES:.*\n?/i, "").trim();
+    if (!isPro) { usedCount++; localStorage.setItem("ela_coach_used_v1", String(usedCount)); updateBadge(); }
+    status.textContent = `✅ Done (${AGENTS.find(a => a.id === activeAgent)?.title})`;
+    speed.textContent = `${data.provider} • ${data.model} • ${data.ms}ms`;
+  } catch (e) {
+    status.textContent = "❌ Error";
+    out.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+window.copyOut = () => {
+  if (!lastOutput) return;
+  navigator.clipboard?.writeText(lastOutput);
+  document.getElementById("statusText").textContent = "📋 Copied to clipboard!";
+};
+
+window.updateWordCount = () => {
+  const txt = document.getElementById("studentInput").value.trim();
+  const words = txt ? txt.split(/\s+/).length : 0;
+  const el = document.getElementById("wordCount");
+  el.textContent = `${words} words (Task 2 target: 250+)`;
+  el.classList.toggle("ok", words >= 250);
+};
+
+let timerId = null;
+window.startTimer = (secs) => {
+  if (timerId) clearInterval(timerId);
+  let left = secs;
+  const disp = document.getElementById("timerDisplay");
+  const tick = () => {
+    const m = Math.floor(left / 60), s = left % 60;
+    disp.textContent = `⏱️ ${m}:${String(s).padStart(2, "0")}`;
+    if (left <= 0) { clearInterval(timerId); disp.textContent = "⏰ Time's up!"; }
+    left--;
+  };
+  tick();
+  timerId = setInterval(tick, 1000);
+};
+
+let rec = null, listening = false;
+window.toggleMic = () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return alert("Voice mic works in Chrome / Edge browser.");
+  const btn = document.getElementById("micBtn");
+  if (listening && rec) { rec.stop(); listening = false; btn.textContent = "🎤 Speak Answer (Mic)"; return; }
+  rec = new SR();
+  rec.lang = "en-US";
+  rec.continuous = true;
+  rec.interimResults = false;
+  rec.onresult = (e) => {
+    const t = Array.from(e.results).map(r => r[0].transcript).join(" ");
+    const box = document.getElementById("studentInput");
+    box.value = (box.value ? box.value + " " : "") + t;
+    updateWordCount();
+  };
+  rec.onend = () => { listening = false; btn.textContent = "🎤 Speak Answer (Mic)"; };
+  rec.start();
+  listening = true;
+  btn.textContent = "🔴 Listening... (Click to Stop)";
+};
+
+function renderScoreCard(text) {
+  const card = document.getElementById("scoreCard");
+  const m = text.match(/SCORES:\s*Overall=([\d.]+)\s*\|\s*Task=([\d.]+)\s*\|\s*Coherence=([\d.]+)\s*\|\s*Vocabulary=([\d.]+)\s*\|\s*Grammar=([\d.]+)/i);
+  if (!m) { card.classList.remove("show"); return; }
+  const overall = m[1];
+  document.getElementById("scOverall").textContent = overall;
+  const items = [
+    ["Task Response", Number(m[2])],
+    ["Coherence", Number(m[3])],
+    ["Vocabulary", Number(m[4])],
+    ["Grammar", Number(m[5])]
+  ];
+  document.getElementById("scoreBars").innerHTML = items.map(([label, val]) => `
+    <div class="bar-row">
+      <span>${label}</span>
+      <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(100, (val / 9) * 100)}%"></div></div>
+      <strong>${val.toFixed(1)}</strong>
+    </div>
+  `).join("");
+  card.classList.add("show");
+  const hist = JSON.parse(localStorage.getItem("ela_score_hist_v1") || "[]");
+  hist.push({ score: overall, date: new Date().toLocaleDateString() });
+  localStorage.setItem("ela_score_hist_v1", JSON.stringify(hist.slice(-8)));
+  renderHistory();
+}
+
+function renderHistory() {
+  const hist = JSON.parse(localStorage.getItem("ela_score_hist_v1") || "[]");
+  const bar = document.getElementById("historyBar");
+  if (!hist.length) { bar.style.display = "none"; return; }
+  bar.style.display = "block";
+  bar.innerHTML = "📈 <b>Your Band Progress:</b> " + hist.map(h => `Band ${h.score}`).join(" → ");
+}
+
+window.toggleSpeak = () => {
+  if (!lastOutput) return alert("Run an AI Coach Agent first.");
+  const btn = document.getElementById("listenBtn");
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    btn.textContent = "🔊 Listen (UK/US)";
+    return;
+  }
+  const clean = lastOutput.replace(/^SCORES:.*\n?/i, "").replace(/[*#_`]/g, "").slice(0, 1500);
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = "en-GB";
+  u.rate = 1.0;
+  u.onend = () => { btn.textContent = "🔊 Listen (UK/US)"; };
+  btn.textContent = "⏹️ Stop Audio";
+  speechSynthesis.speak(u);
+};
+
+window.shareScoreWa = () => {
+  const overall = document.getElementById("scOverall").textContent || "Band 7.5+";
+  const msg = `I just tested my IELTS/PTE skills on ELA AI Coach and scored Band ${overall}! Try 3 free AI evaluations here: https://elaielts.org (WhatsApp: +91 98767 01868)`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, "_blank");
+};
+
+const TOPIC_LIBRARY = [
+  { group: "🎤 Latest IELTS Speaking Cue Cards (15)", agent: "speaking", items: [
+    "Cue Card: Describe a skill you learned that helped you in life",
+    "Cue Card: Describe a person who inspired you to do something interesting",
+    "Cue Card: Describe a place you visited that was very crowded",
+    "Cue Card: Describe a time when you helped someone",
+    "Cue Card: Describe a book or movie that made a strong impression on you",
+    "Cue Card: Describe an expensive gift you want to give someone",
+    "Cue Card: Describe a time when you received good news",
+    "Cue Card: Describe a sport or exercise you enjoy doing",
+    "Cue Card: Describe a piece of technology you find difficult to use",
+    "Cue Card: Describe a memorable family celebration",
+    "Cue Card: Describe a job you would not like to do",
+    "Cue Card: Describe a time when you had to wait a long time",
+    "Cue Card: Describe a change that improved your local area",
+    "Cue Card: Describe an advertisement you remember well",
+    "Cue Card: Describe a goal you set and achieved"
+  ]},
+  { group: "🗣️ Spoken English Daily Roleplays (15)", agent: "speaking", items: [
+    "Spoken English Roleplay: Job Interview — 'Tell me about yourself' & strengths",
+    "Spoken English Roleplay: Canada/UK/Australia Visa & Embassy Interview",
+    "Spoken English Roleplay: Airport Immigration & Customs Counter",
+    "Spoken English Roleplay: Confident Office Meeting & Client Call",
+    "Spoken English Roleplay: Ordering Food & Polite Requests at a Restaurant",
+    "Spoken English Roleplay: Doctor Clinic & Explaining Symptoms",
+    "Spoken English Roleplay: Hotel Check-in & Room Upgrade Request",
+    "Spoken English Roleplay: Bank Account Opening & Loan Inquiry",
+    "Spoken English Roleplay: Shopping & Asking for Discounts Politely",
+    "Spoken English Roleplay: Small Talk with New Colleagues & Neighbors",
+    "Spoken English Roleplay: Salary Negotiation with Your Manager",
+    "Spoken English Roleplay: Calling Customer Support to Solve an Issue",
+    "Spoken English Roleplay: Giving a 2-Minute Team Presentation",
+    "Spoken English Roleplay: Asking for Directions in a New City",
+    "Spoken English Roleplay: Apologizing & Rescheduling an Appointment"
+  ]},
+  { group: "✍️ IELTS Writing Task 2 & PTE Essay Topics (10)", agent: "writing", items: [
+    "Band 8+ Essay Plan: Will Artificial Intelligence replace human teachers?",
+    "Band 8+ Essay Plan: Should governments ban junk food advertisements?",
+    "Band 8+ Essay Plan: Remote work vs. working in a traditional office",
+    "Band 8+ Essay Plan: Four-day work week — advantages and disadvantages",
+    "Band 8+ Essay Plan: Social media impact on youth mental health",
+    "Band 8+ Essay Plan: Free university education for all — agree or disagree?",
+    "Band 8+ Essay Plan: Traffic congestion — causes and practical solutions",
+    "Band 8+ Essay Plan: Should countries invest in space exploration or poverty?",
+    "Band 8+ Essay Plan: Online shopping vs. local brick-and-mortar shops",
+    "Band 8+ Essay Plan: Protecting the environment — government vs. individual duty"
+  ]},
+  { group: "📚 Core English Grammar & C1 Upgrades (10)", agent: "grammar", items: [
+    "12 Tense Mastery: Simple, Continuous & Perfect Tenses with 3-question quiz",
+    "Direct & Indirect Narration Rules (Statements, Questions & Commands)",
+    "Active & Passive Voice for Band 8+ Academic Writing",
+    "Zero, First, Second & Third Conditionals with real-life examples",
+    "C1 Inversion (Rarely have I seen..., Not only did...) for Band 8+",
+    "Unreal Past (It's high time you went..., I wish I had...) with quiz",
+    "Modal Verbs (Must, Should, Could have, Might have) in Spoken English",
+    "Stop saying 'very good', 'very tired', 'I don't know' -> Band 8+ C1 upgrades",
+    "20 High-Scoring Academic Collocations for IELTS & PTE",
+    "Common Indian-English Grammar Mistakes & Native Corrections"
+  ]},
+  { group: "📖 IELTS Reading & PTE Fill-in-the-Blanks (5)", agent: "reading", items: [
+    "IELTS Reading Passage + 5 True/False/Not Given questions on Climate Tech",
+    "IELTS Reading Passage + 5 True/False/Not Given questions on Sleep Science",
+    "IELTS Reading Passage + 5 True/False/Not Given questions on Ancient Trade",
+    "PTE Reading & Writing: 5 Fill-in-the-Blanks Collocation Traps with answers",
+    "PTE Listening/Reading: High-Frequency Academic Vocabulary Quiz"
+  ]}
+];
+
+function populateTopicLibrary() {
+  const sel = document.getElementById("topicLibrary");
+  TOPIC_LIBRARY.forEach((grp) => {
+    const og = document.createElement("optgroup");
+    og.label = grp.group;
+    grp.items.forEach((item) => {
+      const opt = document.createElement("option");
+      opt.value = JSON.stringify({ agent: grp.agent, text: item });
+      opt.textContent = item;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+}
+
+window.pickLibraryTopic = (sel) => {
+  if (!sel.value) return;
+  const { agent, text } = JSON.parse(sel.value);
+  activeAgent = agent;
+  renderAgents();
+  document.getElementById("studentInput").value = text;
+  updateWordCount();
+  sel.value = "";
+};
+
+const FLASHCARDS = [
+  { basic: "Very important", c1: "Paramount / Pivotal", ex: "Education plays a pivotal role in economic growth." },
+  { basic: "Very tired", c1: "Exhausted / Drained", ex: "After a 12-hour shift, I felt completely drained." },
+  { basic: "I don't know", c1: "It beats me / I'm unsure", ex: "It beats me why traffic is so heavy today." },
+  { basic: "Make it smaller / less", c1: "Mitigate / Alleviate", ex: "Governments must mitigate the effects of pollution." },
+  { basic: "Very good / profitable", c1: "Lucrative / Rewarding", ex: "AI automation has become a lucrative career path." },
+  { basic: "Hard to understand", c1: "Ambiguous / Complex", ex: "The contract wording was slightly ambiguous." },
+  { basic: "Practical & realistic", c1: "Pragmatic", ex: "We need a pragmatic solution to urban congestion." },
+  { basic: "Ability to recover fast", c1: "Resilience", ex: "Small business owners showed remarkable resilience." },
+  { basic: "Face a difficult task", c1: "Bite the bullet", ex: "I decided to bite the bullet and book my IELTS exam." },
+  { basic: "I'm listening carefully", c1: "I'm all ears", ex: "Tell me your Band 8 strategy — I'm all ears!" },
+  { basic: "Very common / everywhere", c1: "Ubiquitous", ex: "Smartphones have become ubiquitous in modern classrooms." },
+  { basic: "Make a problem worse", c1: "Exacerbate", ex: "Lack of sleep can exacerbate exam anxiety." },
+  { basic: "Very clear / obvious", c1: "Evident / Apparent", ex: "It is evident that daily practice boosts fluency." },
+  { basic: "Your turn to decide", c1: "The ball is in your court", ex: "I've sent the proposal, so the ball is in your court." },
+  { basic: "Benefits of two options", c1: "Best of both worlds", ex: "Hybrid work gives employees the best of both worlds." }
+];
+let fcIdx = 0, fcFlipped = false;
+
+function renderFlashcard() {
+  const c = FLASHCARDS[fcIdx];
+  document.getElementById("fcNum").textContent = fcIdx + 1;
+  document.getElementById("fcBasic").textContent = "Stop saying: " + c.basic;
+  document.getElementById("fcC1").textContent = fcFlipped ? c.c1 : "👆 Tap card to reveal Band 8+ Upgrade";
+  document.getElementById("fcEx").textContent = fcFlipped ? c.ex : "";
+}
+window.flipFlashcard = () => { fcFlipped = !fcFlipped; renderFlashcard(); };
+window.nextFlashcard = (dir) => { fcIdx = (fcIdx + dir + FLASHCARDS.length) % FLASHCARDS.length; fcFlipped = false; renderFlashcard(); };
+window.speakFlashcard = () => {
+  const c = FLASHCARDS[fcIdx];
+  const u = new SpeechSynthesisUtterance(`${c.c1}. ${c.ex}`);
+  u.lang = "en-GB"; u.rate = 0.95;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+};
+
+function updateStreak() {
+  const today = new Date().toISOString().slice(0, 10);
+  const last = localStorage.getItem("ela_streak_date_v1");
+  let streak = Number(localStorage.getItem("ela_streak_num_v1") || 0);
+  if (last !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    streak = (last === yesterday) ? streak + 1 : 1;
+    localStorage.setItem("ela_streak_date_v1", today);
+    localStorage.setItem("ela_streak_num_v1", String(streak));
+  }
+  document.getElementById("streakBadge").textContent = `🔥 Day ${streak} Streak`;
+}
+
+renderAgents();
+populateTopicLibrary();
+updateBadge();
+renderHistory();
+renderFlashcard();
+updateStreak();
+</script>
+</body>
+</html>
