@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+
 /**
  * ELA IELTS & PTE AI Coach App â€” Student Coaching & Passive Income PWA
  * Powered by fast-ai-router.js (Groq -> OpenRouter Free -> Gemini Free) at â‚¹0 cost.
